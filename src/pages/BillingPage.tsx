@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router"
 import {
   Check,
   CheckCircle2,
@@ -12,7 +11,6 @@ import {
   Card,
   Modal,
   Progress,
-  Select,
 } from "../components/ui"
 
 export interface BillingPlan {
@@ -114,12 +112,10 @@ export const subscriptionPlans: BillingPlan[] = [
 ]
 
 export function BillingPage() {
-  const navigate = useNavigate()
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual")
-  const [plans, setPlans] = useState(subscriptionPlans)
+  const [plans] = useState(subscriptionPlans)
   const [topUpModalOpen, setTopUpModalOpen] = useState(false)
   const [upgradePlanModal, setUpgradePlanModal] = useState<BillingPlan | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking">("upi")
   const [toast, setToast] = useState("")
 
   // Usage telemetry

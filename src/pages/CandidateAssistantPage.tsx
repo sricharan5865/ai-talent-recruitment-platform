@@ -4,7 +4,6 @@ import {
   Bot,
   Check,
   CheckCircle2,
-  Copy,
   RotateCcw,
   Send,
   Sparkles,

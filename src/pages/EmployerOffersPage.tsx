@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router"
 import {
   CheckCircle2,
   Download,
@@ -78,7 +77,6 @@ export const initialOffers: OfferCandidate[] = [
 ]
 
 export function EmployerOffersPage() {
-  const navigate = useNavigate()
   const [offersList, setOffersList] = useState<OfferCandidate[]>(initialOffers)
   const [createOfferOpen, setCreateOfferOpen] = useState(false)
   const [selectedOffer, setSelectedOffer] = useState<OfferCandidate | null>(null)

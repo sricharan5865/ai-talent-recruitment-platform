@@ -7,7 +7,6 @@ import {
   KeyRound,
   Lock,
   Plus,
-  Settings,
   Shield,
   Users,
   Workflow,

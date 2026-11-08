@@ -3,7 +3,6 @@ import { useNavigate, useParams, useSearchParams } from "react-router"
 import {
   Area,
   AreaChart,
-  Bar,
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
@@ -44,7 +43,7 @@ import {
   X,
   Zap,
 } from "lucide-react"
-import { candidates, jobs, performance } from "../data/mockData"
+import { candidates, performance } from "../data/mockData"
 import {
   Avatar,
   Badge,
@@ -285,7 +284,7 @@ export function JobsPage() {
   const [contactChannel, setContactChannel] = useState<"whatsapp" | "email">("whatsapp")
 
   // Enhanced Jobs List
-  const [allJobsList, setAllJobsList] = useState([
+  const [allJobsList] = useState([
     {
       id: "j-1",
       title: "Senior Product Designer",
@@ -1949,7 +1948,7 @@ export function PipelinePage() {
       {/* 14-Stage Stage Progress Funnel Bar */}
       <div className="bg-white p-3 border border-gray-200 rounded-xl mb-4 overflow-x-auto">
         <div className="flex items-center gap-1 min-w-[900px] text-[11px]">
-          {columns.slice(0, 11).map((col, idx) => (
+          {columns.slice(0, 11).map((col) => (
             <div key={col.stageId} className="flex-1 flex flex-col items-center">
               <div className="w-full h-1.5 bg-blue-100 rounded-full overflow-hidden mb-1">
                 <div

@@ -17,7 +17,6 @@ import {
   Copy,
   FileCheck2,
   FileText,
-  Filter,
   GitCompareArrows,
   IndianRupee,
   Lightbulb,
@@ -137,9 +136,7 @@ export function CandidateDashboard() {
   const [counterTone, setCounterTone] = useState<"confident" | "strategic" | "collaborative">("strategic")
 
   // Resume Scan tool state
-  const [scanCompany, setScanCompany] = useState("CRED")
-  const [isScanning, setIsScanning] = useState(false)
-  const [scanResultReady, setScanResultReady] = useState(true)
+  const scanCompany = "CRED"
 
   const toggleSave = (title: string) => {
     const exists = saved.includes(title)

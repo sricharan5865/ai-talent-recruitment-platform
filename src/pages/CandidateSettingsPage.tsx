@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router"
 import {
   Building2,
   Check,
@@ -17,7 +16,6 @@ import {
 } from "../components/ui"
 
 export function CandidateSettingsPage() {
-  const navigate = useNavigate()
   const [toast, setToast] = useState("")
 
   // DPDP Consent toggles

@@ -8,7 +8,6 @@ import {
   Search,
   Send,
   Sparkles,
-  Target,
   X,
 } from "lucide-react"
 import {
@@ -54,7 +53,7 @@ export function OutreachCampaignPage() {
     "App notification",
     "Email",
   ])
-  const [targetCity, setTargetCity] = useState("Bengaluru (Indiranagar, HSR, Bellandur)")
+  const targetCity = "Bengaluru (Indiranagar, HSR, Bellandur)"
 
   const [campaigns, setCampaigns] = useState<NViteCampaign[]>([
     {

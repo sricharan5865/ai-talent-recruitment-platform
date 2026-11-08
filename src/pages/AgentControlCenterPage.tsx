@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useNavigate } from "react-router"
 import {
   Bot,
   Calendar,
@@ -8,7 +7,6 @@ import {
   ChevronRight,
   Cpu,
   FileCheck2,
-  Filter,
   Lock,
   MessageSquare,
   Pause,
@@ -214,7 +212,6 @@ export const autonomousAgents: AgentDefinition[] = [
 ]
 
 export function AgentControlCenterPage() {
-  const navigate = useNavigate()
   const [agents, setAgents] = useState(autonomousAgents)
   const [activeTab, setActiveTab] = useState<"registry" | "approvals" | "traces" | "guardrails" | "telemetry">("registry")
   const [selectedAgent, setSelectedAgent] = useState<AgentDefinition | null>(null)
@@ -258,7 +255,7 @@ export function AgentControlCenterPage() {
   ])
 
   // Live execution logs
-  const [executionLogs, setExecutionLogs] = useState([
+  const [executionLogs] = useState([
     {
       id: "log-1",
       agent: "Matching Agent",

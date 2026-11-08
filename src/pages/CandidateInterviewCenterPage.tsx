@@ -1,23 +1,17 @@
 import { useMemo, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import {
-  ArrowRight,
-  Bell,
   Calendar as CalendarIcon,
   CalendarDays,
-  Check,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
   Clock,
   Download,
   ExternalLink,
-  MapPin,
   Plus,
   RefreshCw,
-  Search,
   Sparkles,
-  User,
   Users,
   Video,
 } from "lucide-react"

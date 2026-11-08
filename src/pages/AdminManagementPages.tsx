@@ -12,8 +12,6 @@ import {
 import {
   CheckCircle2,
   Download,
-  Filter,
-  Key,
   Plus,
   RefreshCw,
   Search,
@@ -152,7 +150,6 @@ export function AdminSecurityPage() {
   const [toast, setToast] = useState("")
   const [mfaEnforced, setMfaEnforced] = useState(true)
   const [dpdpStrict, setDpdpStrict] = useState(true)
-  const [sessionTimeout, setSessionTimeout] = useState("30")
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto px-4 py-2">
@@ -236,7 +233,6 @@ export function AdminSecurityPage() {
 // 3. ADMIN AUDIT LOGS PAGE
 export function AdminAuditLogsPage() {
   const [toast, setToast] = useState("")
-  const [filterType, setFilterType] = useState("all")
 
   const logs = [
     { id: "l-1", actor: "AI Screening Agent", action: "Parsed 14 resumes with candidate consent check", tenant: "Nexora Labs", time: "2 mins ago", ip: "10.0.4.12" },

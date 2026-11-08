@@ -11,7 +11,6 @@ import {
   Plus,
   Sparkles,
   Star,
-  Target,
   Trash2,
   WandSparkles,
 } from "lucide-react"

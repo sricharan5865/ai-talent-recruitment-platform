@@ -3,7 +3,6 @@ import { useNavigate } from "react-router"
 import {
   ArrowRight,
   Award,
-  BadgeCheck,
   BarChart3,
   Bookmark,
   Briefcase,
@@ -11,23 +10,16 @@ import {
   Check,
   CheckCircle2,
   ChevronDown,
-  ChevronRight,
   Clock,
   Cog,
   ExternalLink,
   FileText,
-  Filter,
   GraduationCap,
   Home,
   IndianRupee,
-  Landmark,
-  LineChart,
-  Lock,
-  LogIn,
   MapPin,
   MessageSquare,
   Search,
-  Shield,
   ShieldCheck,
   ShoppingBag,
   Sparkles,
@@ -63,12 +55,7 @@ function GoogleIcon() {
   )
 }
 import {
-  Badge,
   Button,
-  Card,
-  Input,
-  Modal,
-  Select,
 } from "../components/ui"
 
 export interface PublicJobItem {
@@ -365,7 +352,6 @@ export function PublicHomePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedExp, setSelectedExp] = useState("5-8 Years (Lead / Staff)")
   const [selectedLocation, setSelectedLocation] = useState("Bengaluru (All Tech Hubs)")
-  const [activeCategoryFilter, setActiveCategoryFilter] = useState<string | null>(null)
   const [savedJobs, setSavedJobs] = useState<Record<string, boolean>>({})
   const [hoveredNav, setHoveredNav] = useState<"jobs" | "companies" | "services" | "employers" | null>(null)
 

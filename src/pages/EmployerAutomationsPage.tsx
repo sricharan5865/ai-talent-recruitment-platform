@@ -6,7 +6,6 @@ import {
   Pause,
   Play,
   Plus,
-  Workflow,
 } from "lucide-react"
 import {
   Badge,

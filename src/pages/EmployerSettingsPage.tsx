@@ -18,7 +18,6 @@ export function EmployerSettingsPage() {
   const [orgGstin, setOrgGstin] = useState("29AABCN8291M1Z4")
   const [orgDomain, setOrgDomain] = useState("nexoralabs.com")
   const [orgHeadquarters, setOrgHeadquarters] = useState("Indiranagar, Bengaluru, Karnataka")
-  const [employeeRange, setEmployeeRange] = useState("201–500 employees")
 
   const [teamMembers, setTeamMembers] = useState([
     { id: "tm-1", name: "Neha Kapoor", email: "neha@nexoralabs.com", role: "Talent Lead", status: "Active" },

@@ -1,15 +1,12 @@
 import { useState } from "react"
-import { useNavigate, useSearchParams } from "react-router"
+import { useSearchParams } from "react-router"
 import {
-  Accessibility,
   Bell,
   Bookmark,
   BookmarkCheck,
   Building2,
-  Calendar,
   CheckCircle2,
   Download,
-  Filter,
   FolderKanban,
   HeartHandshake,
   MapPin,
@@ -19,7 +16,6 @@ import {
   Send,
   SlidersHorizontal,
   Sparkles,
-  Star,
 } from "lucide-react"
 import {
   Badge,
@@ -328,7 +324,6 @@ const rPdwCategories = [
 ]
 
 export function AdvancedSearchPage() {
-  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const isSavedTab = searchParams.get("tab") === "saved"
 
@@ -344,7 +339,6 @@ export function AdvancedSearchPage() {
   const [optionalKeywords, setOptionalKeywords] = useState("Design Systems, Microservices")
   const [excludedKeywords, setExcludedKeywords] = useState("Intern, Junior")
   const [booleanSyntax, setBooleanSyntax] = useState("(React OR Figma) AND Senior NOT Intern")
-  const [isSemantic, setIsSemantic] = useState(true)
 
   // Search in Company & Designation
   const [searchCompanyScope, setSearchCompanyScope] = useState("Current company")
@@ -383,10 +377,8 @@ export function AdvancedSearchPage() {
   const [employmentType, setEmploymentType] = useState("All")
 
   // Professional ranges
-  const [minExp, setMinExp] = useState(3)
-  const [maxExp, setMaxExp] = useState(15)
-  const [minSalary, setMinSalary] = useState(12)
-  const [maxSalary, setMaxSalary] = useState(60)
+  const minExp = 3
+  const maxExp = 15
   const [selectedCity, setSelectedCity] = useState("All Cities")
   const [selectedLocality, setSelectedLocality] = useState("All Localities")
 
