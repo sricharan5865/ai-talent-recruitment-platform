@@ -936,6 +936,7 @@ export function AdvancedSearchPage() {
                     value={differentlyAbledFilter}
                     onChange={(e) => setDifferentlyAbledFilter(e.target.value)}
                     className="text-xs h-8 bg-white"
+                    aria-label="Differently-abled RPwD category"
                   >
                     <option>Any</option>
                     <option>Blindness</option>
@@ -1065,6 +1066,7 @@ export function AdvancedSearchPage() {
                         onChange={(e) => setMinAge(Number(e.target.value))}
                         className="text-xs h-8"
                         placeholder="Min"
+                        aria-label="Minimum candidate age"
                       />
                       <span className="text-gray-400">-</span>
                       <Input
@@ -1075,6 +1077,7 @@ export function AdvancedSearchPage() {
                         onChange={(e) => setMaxAge(Number(e.target.value))}
                         className="text-xs h-8"
                         placeholder="Max"
+                        aria-label="Maximum candidate age"
                       />
                     </div>
                   </div>

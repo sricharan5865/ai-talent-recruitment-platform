@@ -681,12 +681,16 @@ export function PublicHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate("/candidate/radar")}
+                  aria-label="Services (1 new update)"
                   className={`flex items-center gap-1.5 h-full transition cursor-pointer font-medium ${
                     hoveredNav === "services" ? "text-slate-900 font-bold" : "hover:text-slate-900"
                   }`}
                 >
                   <span>Services</span>
-                  <span className="w-4 h-4 rounded-full bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center">
+                  <span
+                    aria-hidden="true"
+                    className="w-4 h-4 rounded-full bg-rose-600 text-white text-[10px] font-bold flex items-center justify-center"
+                  >
                     1
                   </span>
                 </button>
@@ -923,12 +927,14 @@ export function PublicHomePage() {
             <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200 p-2 sm:p-2.5 flex flex-col md:flex-row items-stretch md:items-center gap-2 md:gap-0 divide-y md:divide-y-0 md:divide-x divide-slate-200 text-left">
               {/* Field 1: Role or Keyword */}
               <div className="flex-1 px-4 py-2 sm:py-1">
-                <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <label htmlFor="search-role-input" className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                   Role, Company or Skills
                 </label>
                 <div className="flex items-center gap-2 mt-0.5">
                   <Search size={16} className="text-slate-400 shrink-0" />
                   <input
+                    id="search-role-input"
+                    name="searchQuery"
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -940,13 +946,16 @@ export function PublicHomePage() {
 
               {/* Field 2: Experience */}
               <div className="md:w-56 px-4 py-2 sm:py-1">
-                <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <label htmlFor="search-exp-select" className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                   Experience Level
                 </label>
                 <div className="flex items-center justify-between mt-0.5 cursor-pointer">
                   <div className="flex items-center gap-2">
                     <Briefcase size={16} className="text-slate-400 shrink-0" />
                     <select
+                      id="search-exp-select"
+                      name="experience"
+                      aria-label="Experience Level"
                       value={selectedExp}
                       onChange={(e) => setSelectedExp(e.target.value)}
                       className="text-xs sm:text-sm font-semibold text-slate-800 bg-transparent focus:outline-hidden cursor-pointer"
@@ -962,13 +971,16 @@ export function PublicHomePage() {
 
               {/* Field 3: Location */}
               <div className="md:w-60 px-4 py-2 sm:py-1">
-                <label className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                <label htmlFor="search-location-select" className="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
                   Location
                 </label>
                 <div className="flex items-center justify-between mt-0.5 cursor-pointer">
                   <div className="flex items-center gap-2">
                     <MapPin size={16} className="text-slate-400 shrink-0" />
                     <select
+                      id="search-location-select"
+                      name="location"
+                      aria-label="Location"
                       value={selectedLocation}
                       onChange={(e) => setSelectedLocation(e.target.value)}
                       className="text-xs sm:text-sm font-semibold text-slate-800 bg-transparent focus:outline-hidden cursor-pointer"
@@ -1721,11 +1733,14 @@ export function PublicHomePage() {
               <form onSubmit={handleManualLogin} className="space-y-4">
                 {/* Email / Username field */}
                 <div>
-                  <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                  <label htmlFor="login-email" className="block text-xs font-bold text-slate-800 mb-1.5">
                     Email ID / Username
                   </label>
                   <input
+                    id="login-email"
+                    name="username"
                     type="text"
+                    autoComplete="username"
                     required
                     value={loginEmail}
                     onChange={(e) => setLoginEmail(e.target.value)}
@@ -1737,12 +1752,15 @@ export function PublicHomePage() {
                 {/* Password / OTP field */}
                 {!useOtpLogin ? (
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                    <label htmlFor="login-password" className="block text-xs font-bold text-slate-800 mb-1.5">
                       Password
                     </label>
                     <div className="relative">
                       <input
+                        id="login-password"
+                        name="password"
                         type={showPassword ? "text" : "password"}
+                        autoComplete="current-password"
                         required
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
@@ -1773,12 +1791,15 @@ export function PublicHomePage() {
                   </div>
                 ) : (
                   <div>
-                    <label className="block text-xs font-bold text-slate-800 mb-1.5">
+                    <label htmlFor="login-otp" className="block text-xs font-bold text-slate-800 mb-1.5">
                       One Time Password (OTP)
                     </label>
                     <input
+                      id="login-otp"
+                      name="otp"
                       type="text"
                       maxLength={6}
+                      autoComplete="one-time-code"
                       required
                       value={loginOtp}
                       onChange={(e) => setLoginOtp(e.target.value)}

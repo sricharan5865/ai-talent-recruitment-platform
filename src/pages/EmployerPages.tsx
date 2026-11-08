@@ -771,9 +771,9 @@ export function JobsPage() {
           <div className="table-footer">
             <span>Showing {shownJobs.length} of {allJobsList.length} jobs</span>
             <div className="flex items-center gap-1 text-xs">
-              <Button variant="secondary" className="h-7"><ChevronLeft size={14} /></Button>
+              <Button variant="secondary" className="h-7" aria-label="Previous page"><ChevronLeft size={14} /></Button>
               <Button variant="secondary" className="h-7">1</Button>
-              <Button variant="secondary" className="h-7"><ChevronRight size={14} /></Button>
+              <Button variant="secondary" className="h-7" aria-label="Next page"><ChevronRight size={14} /></Button>
             </div>
           </div>
         </Card>
@@ -1151,29 +1151,32 @@ export function CreateJobPage() {
               Maximum salary
               <Input defaultValue="₹36,00,000" />
             </label>
-            <label className="span-2">
-              Job description
+            <div className="span-2">
+              <label htmlFor="job-description" className="block text-xs font-semibold mb-1">
+                Job description
+              </label>
               <div className="editor-toolbar">
-                <Button variant="ghost">
+                <Button variant="ghost" aria-label="Bold">
                   <b>B</b>
                 </Button>
-                <Button variant="ghost">
+                <Button variant="ghost" aria-label="Italic">
                   <i>I</i>
                 </Button>
-                <Button variant="ghost">
+                <Button variant="ghost" aria-label="Bulleted list">
                   <ListFilter />
                 </Button>
-                <Button variant="ghost" onClick={() => setAssistant(true)}>
+                <Button variant="ghost" onClick={() => setAssistant(true)} aria-label="Improve with AI">
                   <WandSparkles /> Improve with AI
                 </Button>
               </div>
               <textarea
+                id="job-description"
                 className="textarea"
                 defaultValue={
-                  "As a Senior Product Designer, you will shape end-to-end experiences for our enterprise platform. You will partner closely with product and engineering to turn complex hiring workflows into clear, intuitive products.\\n\\nWhat you’ll do\\n• Lead discovery and design for high-impact product areas\\n• Evolve our design system and raise product quality\\n• Mentor designers and champion customer insight"
+                  "As a Senior Product Designer, you will shape end-to-end experiences for our enterprise platform. You will partner closely with product and engineering to turn complex hiring workflows into clear, intuitive products.\n\nWhat you’ll do\n• Lead discovery and design for high-impact product areas\n• Evolve our design system and raise product quality\n• Mentor designers and champion customer insight"
                 }
               />
-            </label>
+            </div>
           </div>
           <div className="form-actions">
             <Button
@@ -1381,7 +1384,7 @@ export function CandidatesPage() {
               >
                 {c.stage}
               </Badge>
-              <Button variant="ghost">
+              <Button variant="ghost" aria-label="More conversation options">
                 <MoreHorizontal />
               </Button>
             </div>
@@ -1429,7 +1432,7 @@ export function CandidateProfilePage() {
           <Button>
             <UserCheck /> Shortlist
           </Button>
-          <Button variant="ghost">
+          <Button variant="ghost" aria-label="More actions">
             <MoreHorizontal />
           </Button>
         </div>
@@ -1984,7 +1987,7 @@ export function PipelinePage() {
                   <strong className="text-xs">{col.name}</strong>
                   <b>{col.items.length}</b>
                 </span>
-                <Button variant="ghost">
+                <Button variant="ghost" aria-label="Stage actions">
                   <MoreHorizontal size={14} />
                 </Button>
               </div>
@@ -2260,7 +2263,7 @@ export function CommunicationPage() {
               <Button variant="secondary">
                 <UserCheck /> View candidate
               </Button>
-              <Button variant="ghost">
+              <Button variant="ghost" aria-label="More conversation options">
                 <MoreHorizontal />
               </Button>
             </div>
@@ -2302,7 +2305,7 @@ export function CommunicationPage() {
           </div>
           <footer>
             <div>
-              <Button variant="ghost">
+              <Button variant="ghost" aria-label="Attach file">
                 <Plus />
               </Button>
               <Input
@@ -2315,8 +2318,10 @@ export function CommunicationPage() {
                   }
                 }}
                 placeholder="Write a message…"
+                aria-label="Message text"
               />
               <Button
+                aria-label="Send message"
                 onClick={() => {
                   if (message) {
                     setSent([...sent, message])

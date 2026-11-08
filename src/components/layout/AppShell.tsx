@@ -738,6 +738,7 @@ export function AppShell({
             variant="ghost"
             className="menu-btn"
             onClick={() => setMobileOpen(true)}
+            aria-label="Open mobile navigation"
           >
             <Menu size={20} />
           </Button>

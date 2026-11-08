@@ -344,6 +344,7 @@ export function CandidateResumeVaultPage() {
                       variant="ghost"
                       className="h-8 text-xs px-2 text-red-600 hover:text-red-800"
                       onClick={() => deleteVersion(cv.id)}
+                      aria-label="Delete resume version"
                     >
                       <Trash2 size={13} />
                     </Button>

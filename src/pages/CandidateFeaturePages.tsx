@@ -248,6 +248,13 @@ const companies = [
 export function CompanyIntelligencePage() {
   const [selected, setSelected] = useState(companies[0])
   const [following, setFollowing] = useState<string[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+
+  const filteredCompanies = companies.filter((c) =>
+    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.industry.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <>
       <Header
@@ -257,8 +264,17 @@ export function CompanyIntelligencePage() {
       />
       <Card className="company-search-bar">
         <Search />
-        <Input placeholder="Search companies, teams, or industries…" />
-        <Button>Explore companies</Button>
+        <Input
+          placeholder="Search companies, teams, or industries…"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search companies, teams, or industries"
+        />
+        <Button onClick={() => {
+          if (filteredCompanies.length > 0) setSelected(filteredCompanies[0])
+        }}>
+          Explore companies
+        </Button>
       </Card>
       <div className="company-intelligence-layout">
         <Card className="company-rank-list">
@@ -268,7 +284,7 @@ export function CompanyIntelligencePage() {
               <p>Ranked by preferences, not advertising</p>
             </div>
           </div>
-          {companies.map((company) => (
+          {filteredCompanies.map((company) => (
             <button
               className={selected.name === company.name ? "active" : ""}
               key={company.name}
@@ -286,6 +302,11 @@ export function CompanyIntelligencePage() {
               <ChevronRight />
             </button>
           ))}
+          {filteredCompanies.length === 0 && (
+            <div className="p-4 text-center text-xs text-slate-500">
+              No companies match "{searchQuery}"
+            </div>
+          )}
         </Card>
         <div className="company-detail-stack">
           <Card className="company-detail-hero">
@@ -385,9 +406,20 @@ export function CompanyIntelligencePage() {
 
 export function ApplicationStudioPage() {
   const [step, setStep] = useState(1)
-  const [tailored, setTailored] = useState(false)
+  const [appliedSuggestions, setAppliedSuggestions] = useState<number[]>([])
   const [preview, setPreview] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+
+  const toggleSuggestion = (index: number) => {
+    setAppliedSuggestions((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    )
+  }
+
+  const relevanceScore = Math.min(94, 82 + appliedSuggestions.length * 4)
+  const evidenceScore = 88 + (appliedSuggestions.includes(1) ? 5 : 0)
+  const readinessScore = Math.min(91, 84 + appliedSuggestions.length * 3)
+
   return (
     <>
       <Header
@@ -429,9 +461,9 @@ export function ApplicationStudioPage() {
           <div className="studio-score-grid">
             {(
               [
-                ["Resume relevance", tailored ? 94 : 82, FileText],
-                ["Evidence strength", 88, BadgeCheck],
-                ["Role readiness", tailored ? 91 : 84, Target],
+                ["Resume relevance", relevanceScore, FileText],
+                ["Evidence strength", evidenceScore, BadgeCheck],
+                ["Role readiness", readinessScore, Target],
               ] as [string, number, typeof FileText][]
             ).map(([l, v, Icon]) => (
               <div key={l}>
@@ -453,7 +485,9 @@ export function ApplicationStudioPage() {
                 <h2>Recommended improvements</h2>
                 <p>Review every suggestion before applying it</p>
               </div>
-              <Badge tone="purple">3 ready</Badge>
+              <Badge tone="purple">
+                {appliedSuggestions.length === 3 ? "All applied" : `${3 - appliedSuggestions.length} ready`}
+              </Badge>
             </div>
             {[
               [
@@ -468,25 +502,29 @@ export function ApplicationStudioPage() {
                 "Quantify performance work",
                 "Add the 34% load-time improvement.",
               ],
-            ].map((item, index) => (
-              <div className="studio-suggestion" key={item[0]}>
-                <span>{index + 1}</span>
-                <div>
-                  <strong>{item[0]}</strong>
-                  <p>{item[1]}</p>
+            ].map((item, index) => {
+              const isApplied = appliedSuggestions.includes(index)
+              return (
+                <div className="studio-suggestion" key={item[0]}>
+                  <span>{index + 1}</span>
+                  <div>
+                    <strong>{item[0]}</strong>
+                    <p>{item[1]}</p>
+                  </div>
+                  <Badge tone={index === 1 ? "blue" : "green"}>
+                    {index === 1 ? "Evidence found" : "High impact"}
+                  </Badge>
+                  <Button
+                    variant={isApplied ? "secondary" : "primary"}
+                    onClick={() => toggleSuggestion(index)}
+                    aria-label={`${isApplied ? "Remove" : "Apply"} suggestion: ${item[0]}`}
+                  >
+                    {isApplied ? <Check /> : <WandSparkles />}
+                    {isApplied ? "Applied" : "Apply"}
+                  </Button>
                 </div>
-                <Badge tone={index === 1 ? "blue" : "green"}>
-                  {index === 1 ? "Evidence found" : "High impact"}
-                </Badge>
-                <Button
-                  variant={tailored ? "secondary" : "primary"}
-                  onClick={() => setTailored(true)}
-                >
-                  {tailored ? <Check /> : <WandSparkles />}
-                  {tailored ? "Applied" : "Apply"}
-                </Button>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </Card>
         <aside className="studio-side">
@@ -499,7 +537,7 @@ export function ApplicationStudioPage() {
               Everything the employer will receive, previewed before submission.
             </p>
             {[
-              ["Tailored resume", tailored ? "Ready" : "Needs review"],
+              ["Tailored resume", appliedSuggestions.length > 0 ? "Ready" : "Needs review"],
               ["Career Passport", "Included"],
               ["Portfolio", "3 case studies"],
               ["Cover note", "Optional"],
