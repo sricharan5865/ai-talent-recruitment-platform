@@ -128,6 +128,7 @@ export const router = createBrowserRouter([
       { path: "resume", element: <CandidateResumeVaultPage /> },
       { path: "assistant", element: <CandidateAssistantPage /> },
       { path: "interviews", element: <CandidateInterviewCenterPage /> },
+      { path: "calendar", element: <CandidateInterviewCenterPage initialTab="calendar" /> },
       { path: "ux-analysis", element: <UxAnalysisPage /> },
       { path: "settings", element: <CandidateSettingsPage /> },
     ],

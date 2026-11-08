@@ -821,6 +821,90 @@ export function CandidateDashboard() {
 
       {/* Right Column: Interactive To-Dos, Recruiter Pulse, Guide */}
       <aside className="home-right">
+        {/* Interview Calendar & Upcoming Rounds Preview Card */}
+        <Card className="home-side-card border-indigo-200/90 shadow-xs">
+          <div className="home-section-head">
+            <div>
+              <span className="eyebrow text-indigo-600">Schedule</span>
+              <h3 className="font-bold">Interview Calendar</h3>
+            </div>
+            <Button
+              variant="secondary"
+              className="text-xs h-7 px-2"
+              onClick={() => navigate("/candidate/calendar")}
+            >
+              Full Calendar →
+            </Button>
+          </div>
+
+          {/* Mini-Week Ribbon */}
+          <div className="grid grid-cols-7 gap-1 my-2 bg-slate-50 p-1.5 rounded-xl border border-gray-100 text-center">
+            {[
+              { day: "M", num: 9, hasEvent: true, today: true },
+              { day: "T", num: 10, hasEvent: false },
+              { day: "W", num: 11, hasEvent: true },
+              { day: "T", num: 12, hasEvent: true },
+              { day: "F", num: 13, hasEvent: false },
+              { day: "S", num: 14, hasEvent: true },
+              { day: "S", num: 15, hasEvent: false },
+            ].map((item) => (
+              <button
+                key={item.num}
+                type="button"
+                onClick={() => navigate("/candidate/calendar")}
+                className={`flex flex-col items-center py-1 rounded-lg transition ${
+                  item.today
+                    ? "bg-indigo-600 text-white font-bold"
+                    : item.hasEvent
+                      ? "bg-indigo-50 text-indigo-900 font-semibold"
+                      : "text-gray-400 hover:bg-gray-100"
+                }`}
+              >
+                <span className="text-[10px]">{item.day}</span>
+                <span className="text-xs">{item.num}</span>
+                {item.hasEvent && !item.today && (
+                  <span className="w-1 h-1 rounded-full bg-indigo-600 mt-0.5" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="space-y-2 mt-2">
+            <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200/80 text-xs">
+              <div className="flex items-center justify-between text-blue-900 font-bold mb-0.5">
+                <span>Nexora Labs</span>
+                <Badge tone="purple">Tomorrow</Badge>
+              </div>
+              <p className="text-blue-800 font-medium">Portfolio Review · 10:00 AM</p>
+              <div className="flex items-center justify-between mt-1 text-[11px] text-blue-700">
+                <span>Google Meet (60m)</span>
+                <button
+                  type="button"
+                  className="font-bold underline hover:text-blue-900"
+                  onClick={() => navigate("/candidate/calendar")}
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-slate-50 border border-gray-200 text-xs">
+              <div className="flex items-center justify-between text-gray-900 font-semibold mb-0.5">
+                <span>PhonePe</span>
+                <span className="text-[10px] text-gray-500 font-bold">Thu, Nov 12</span>
+              </div>
+              <p className="text-gray-700">Technical Architecture · 3:00 PM</p>
+            </div>
+          </div>
+
+          <Button
+            className="w-full text-xs h-8 mt-3"
+            onClick={() => navigate("/candidate/calendar")}
+          >
+            <CalendarDays size={13} /> Open Interview Calendar & Sync
+          </Button>
+        </Card>
+
         {/* Candidate Action Checklist */}
         <Card className="home-side-card">
           <div className="home-section-head">

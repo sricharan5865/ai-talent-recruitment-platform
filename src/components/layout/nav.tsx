@@ -4,6 +4,7 @@ import {
   BookmarkCheck,
   Bot,
   Building2,
+  Calendar,
   CalendarDays,
   CircleUserRound,
   Compass,
@@ -257,6 +258,15 @@ export const candidateNav: NavItem[] = [
     badge: "Tomorrow",
     badgeTone: "amber",
     description: "Upcoming interview schedule & preparation guides",
+  },
+  {
+    label: "Calendar",
+    icon: <Calendar />,
+    to: "/candidate/calendar",
+    group: "Apply & Prepare",
+    badge: "Live",
+    badgeTone: "blue",
+    description: "Interactive monthly schedule, panel dates & calendar sync",
   },
   {
     label: "Career Assistant",
