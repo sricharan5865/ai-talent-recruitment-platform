@@ -1,35 +1,29 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  ArrowRight,
-  Award,
-  BadgeCheck,
-  Check,
   CheckCircle2,
   Copy,
   Download,
   Eye,
-  FileCheck2,
-  FileCode,
   FilePlus,
   FileText,
   FileUp,
-  HelpCircle,
-  Layers,
-  MoreVertical,
   Plus,
-  Search,
-  Share2,
-  Sliders,
   Sparkles,
   Star,
   Target,
   Trash2,
   WandSparkles,
-  X,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Progress, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  Modal,
+  Progress,
+  Select,
+} from "../components/ui"
 
 export interface ResumeVersion {
   id: string

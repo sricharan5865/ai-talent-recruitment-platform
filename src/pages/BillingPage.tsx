@@ -1,24 +1,19 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  ArrowRight,
-  BadgePercent,
   Check,
   CheckCircle2,
-  CreditCard,
   Download,
-  FileCheck2,
-  FileText,
-  HelpCircle,
-  IndianRupee,
-  Plus,
-  QrCode,
-  ShieldCheck,
-  Sparkles,
-  Wallet,
   Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Progress, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Modal,
+  Progress,
+  Select,
+} from "../components/ui"
 
 export interface BillingPlan {
   id: "free" | "starter" | "professional" | "enterprise"

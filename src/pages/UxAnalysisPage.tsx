@@ -16,9 +16,13 @@ import {
   SlidersHorizontal,
   Sparkles,
   WandSparkles,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Progress } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Progress,
+} from "../components/ui"
 
 const companyBenchmarks = [
   {

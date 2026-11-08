@@ -1,26 +1,20 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  Bell,
   Building2,
   Check,
   CheckCircle2,
   Download,
   Eye,
-  EyeOff,
-  Globe,
-  Lock,
-  Mail,
-  MessageSquare,
   Plus,
-  Shield,
-  ShieldAlert,
   ShieldCheck,
-  Trash2,
-  UserCheck,
-  X,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+} from "../components/ui"
 
 export function CandidateSettingsPage() {
   const navigate = useNavigate()

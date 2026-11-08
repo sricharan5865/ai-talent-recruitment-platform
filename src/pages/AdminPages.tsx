@@ -11,12 +11,10 @@ import {
 } from "recharts"
 import {
   Activity,
-  AlertTriangle,
   ChevronRight,
   Bot,
   Building2,
   CheckCircle2,
-  Clock3,
   Filter,
   MoreHorizontal,
   Pause,
@@ -25,7 +23,6 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
-  Zap,
 } from "lucide-react"
 import { agentCatalog, performance } from "../data/mockData"
 import {
@@ -37,7 +34,6 @@ import {
   Progress,
   Select,
 } from "../components/ui"
-import { FeatureDemoPage } from "./DemoPages"
 
 function Header({
   title,
@@ -406,8 +402,4 @@ export function AgentManagementPage() {
       </Modal>
     </>
   )
-}
-
-export function GenericAdminPage({ title }: { title: string }) {
-  return <FeatureDemoPage portal="Platform administration" title={title} />
 }

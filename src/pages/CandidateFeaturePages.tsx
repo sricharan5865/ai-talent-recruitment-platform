@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   BriefcaseBusiness,
-  Building2,
   Check,
   CheckCircle2,
   ChevronRight,
@@ -17,7 +16,6 @@ import {
   Sparkles,
   Target,
   TrendingUp,
-  Users,
   WandSparkles,
   Zap,
 } from "lucide-react"
@@ -429,20 +427,22 @@ export function ApplicationStudioPage() {
             <Badge tone="green">92% match</Badge>
           </div>
           <div className="studio-score-grid">
-            {[
-              ["Resume relevance", tailored ? 94 : 82, FileText],
-              ["Evidence strength", 88, BadgeCheck],
-              ["Role readiness", tailored ? 91 : 84, Target],
-            ].map(([l, v, Icon]) => (
-              <div key={String(l)}>
+            {(
+              [
+                ["Resume relevance", tailored ? 94 : 82, FileText],
+                ["Evidence strength", 88, BadgeCheck],
+                ["Role readiness", tailored ? 91 : 84, Target],
+              ] as [string, number, typeof FileText][]
+            ).map(([l, v, Icon]) => (
+              <div key={l}>
                 <Icon />
                 <span>
-                  <small>{l as string}</small>
-                  <strong>{v as number}%</strong>
+                  <small>{l}</small>
+                  <strong>{v}%</strong>
                 </span>
                 <Progress
-                  value={Number(v)}
-                  tone={Number(v) > 90 ? "green" : "purple"}
+                  value={v}
+                  tone={v > 90 ? "green" : "purple"}
                 />
               </div>
             ))}

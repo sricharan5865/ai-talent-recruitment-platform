@@ -33,11 +33,17 @@ export function Select({
 export function Card({
   children,
   className = "",
+  onClick,
 }: {
   children: ReactNode
   className?: string
+  onClick?: () => void
 }) {
-  return <section className={`card ${className}`}>{children}</section>
+  return (
+    <section className={`card ${className}`} onClick={onClick}>
+      {children}
+    </section>
+  )
 }
 
 export function Badge({

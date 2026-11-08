@@ -7,7 +7,6 @@ import {
   CommunicationPage,
   CreateJobPage,
   EmployerDashboard,
-  GenericEmployerPage,
   InterviewsPage,
   JobsPage,
   MatchingPage,
@@ -17,20 +16,11 @@ import {
   CandidateApplicationsPage,
   CandidateDashboard,
   CandidateProfileSelfPage,
-  GenericCandidatePage,
   MarketplacePage,
 } from "../pages/CandidatePages"
-import {
-  AdminDashboard,
-  AgentManagementPage,
-  GenericAdminPage,
-} from "../pages/AdminPages"
+import { AdminDashboard } from "../pages/AdminPages"
 import { OnboardingDemo } from "../pages/DemoPages"
-import {
-  ApplicationStudioPage,
-  CompanyIntelligencePage,
-  OpportunityRadarPage,
-} from "../pages/CandidateFeaturePages"
+import { ApplicationStudioPage, CompanyIntelligencePage, OpportunityRadarPage } from "../pages/CandidateFeaturePages"
 import { UxAnalysisPage } from "../pages/UxAnalysisPage"
 import { AdvancedSearchPage } from "../pages/AdvancedSearchPage"
 import { AgentControlCenterPage } from "../pages/AgentControlCenterPage"
@@ -47,17 +37,11 @@ import { EmployerAutomationsPage } from "../pages/EmployerAutomationsPage"
 import { EmployerSettingsPage } from "../pages/EmployerSettingsPage"
 import {
   AdminAuditLogsPage,
+  AdminIntegrationsPage,
   AdminSecurityPage,
   AdminUsersPage,
+  AnalyticsPage,
 } from "../pages/AdminManagementPages"
-
-const employerGeneric = (title: string) => () => (
-  <GenericEmployerPage title={title} />
-)
-const candidateGeneric = (title: string) => () => (
-  <GenericCandidatePage title={title} />
-)
-const adminGeneric = (title: string) => () => <GenericAdminPage title={title} />
 
 export const router = createBrowserRouter([
   { path: "/", element: <PublicHomePage /> },
@@ -117,7 +101,7 @@ export const router = createBrowserRouter([
       { path: "agents", element: <AgentControlCenterPage /> },
       { path: "billing", element: <BillingPage /> },
       { path: "offers", element: <EmployerOffersPage /> },
-      { path: "analytics", Component: employerGeneric("Analytics") },
+      { path: "analytics", element: <AnalyticsPage portal="employer" /> },
       {
         path: "automations",
         element: <EmployerAutomationsPage />,
@@ -162,13 +146,15 @@ export const router = createBrowserRouter([
       { path: "users", element: <AdminUsersPage /> },
       { path: "subscriptions", element: <BillingPage /> },
       { path: "automations", element: <EmployerAutomationsPage /> },
-      { path: "integrations", Component: adminGeneric("Integrations") },
-      { path: "analytics", Component: adminGeneric("Analytics") },
+      { path: "integrations", element: <AdminIntegrationsPage /> },
+      { path: "analytics", element: <AnalyticsPage portal="admin" /> },
       { path: "security", element: <AdminSecurityPage /> },
       { path: "audit", element: <AdminAuditLogsPage /> },
       { path: "ux-analysis", element: <UxAnalysisPage /> },
       { path: "settings", element: <EmployerSettingsPage /> },
     ],
   },
-  { path: "*", element: <Navigate to="/candidate" replace /> },
-])
+  { path: "*", element: <Navigate to="/" replace /> },
+], {
+  basename: import.meta.env.BASE_URL,
+})

@@ -1,14 +1,10 @@
-import { useMemo, useState } from "react"
-import { useNavigate, useParams } from "react-router"
+import { useState } from "react"
+import { useNavigate, useParams, useSearchParams } from "react-router"
 import {
   Area,
   AreaChart,
   Bar,
-  BarChart,
   CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -18,7 +14,6 @@ import {
   ArrowLeft,
   ArrowRight,
   BriefcaseBusiness,
-  Calendar,
   CalendarDays,
   Check,
   CheckCircle2,
@@ -27,25 +22,27 @@ import {
   CircleAlert,
   Clock3,
   FileText,
-  Filter,
+  Flame,
+  GraduationCap,
   GripVertical,
-  IndianRupee,
+  Inbox,
   ListFilter,
   Mail,
   MapPin,
   MessageCircle,
+  MessageSquare,
   MoreHorizontal,
   Plus,
   Search,
   Send,
   SlidersHorizontal,
   Sparkles,
-  Star,
   Upload,
   UserCheck,
   Users,
   WandSparkles,
   X,
+  Zap,
 } from "lucide-react"
 import { candidates, jobs, performance } from "../data/mockData"
 import {
@@ -58,7 +55,6 @@ import {
   Progress,
   Select,
 } from "../components/ui"
-import { FeatureDemoPage } from "./DemoPages"
 
 function PageHeader({
   eyebrow,
@@ -270,110 +266,744 @@ export function JobsPage() {
   const [query, setQuery] = useState("")
   const [toast, setToast] = useState("")
   const navigate = useNavigate()
-  const shown = jobs.filter((job) =>
-    job.title.toLowerCase().includes(query.toLowerCase()),
-  )
+
+  // View Mode: "Manage Jobs" vs "Candidate Responses"
+  const [mainView, setMainView] = useState<"jobs" | "responses">("jobs")
+
+  // Manage Jobs filters
+  const [jobStatusTab, setJobStatusTab] = useState<"all" | "active" | "drafts" | "closed" | "expired">("active")
+  const [categoryFilter, setCategoryFilter] = useState("All Categories")
+  const [postedByFilter, setPostedByFilter] = useState("All Recruiters")
+  const [showCount, setShowCount] = useState("60")
+  const [sortByDate, setSortByDate] = useState("Posted/sent date")
+
+  // Candidate Response Management filters
+  const [responseTab, setResponseTab] = useState<"all" | "shortlisted" | "maybe" | "rejected">("all")
+  const [responseFilter, setResponseFilter] = useState<"all" | "new" | "not_viewed" | "action_pending">("all")
+  const [selectedResponseIds, setSelectedResponseIds] = useState<string[]>([])
+  const [contactCandidateModal, setContactCandidateModal] = useState<any | null>(null)
+  const [contactChannel, setContactChannel] = useState<"whatsapp" | "email">("whatsapp")
+
+  // Enhanced Jobs List
+  const [allJobsList, setAllJobsList] = useState([
+    {
+      id: "j-1",
+      title: "Senior Product Designer",
+      department: "Product & Design",
+      location: "Bengaluru (Indiranagar)",
+      applicants: 128,
+      shortlisted: 18,
+      status: "Active",
+      category: "Hot Vacancy",
+      postedBy: "Me",
+      age: "2d",
+      salary: "₹24–36 LPA",
+    },
+    {
+      id: "j-2",
+      title: "Staff Backend Architect (Go / K8s)",
+      department: "Engineering",
+      location: "Bengaluru (Bellandur)",
+      applicants: 94,
+      shortlisted: 12,
+      status: "Active",
+      category: "Hot Vacancy",
+      postedBy: "Me",
+      age: "3d",
+      salary: "₹40–55 LPA",
+    },
+    {
+      id: "j-3",
+      title: "Growth Marketing Lead (Fintech)",
+      department: "Marketing",
+      location: "Mumbai (BKC)",
+      applicants: 42,
+      shortlisted: 6,
+      status: "Active",
+      category: "SMB Job",
+      postedBy: "Team",
+      age: "5d",
+      salary: "₹18–26 LPA",
+    },
+    {
+      id: "j-4",
+      title: "AI Research & LLM Intern",
+      department: "AI & ML",
+      location: "Bengaluru (Hybrid)",
+      applicants: 215,
+      shortlisted: 24,
+      status: "Active",
+      category: "Internship",
+      postedBy: "Me",
+      age: "1d",
+      salary: "₹50k–75k / mo",
+    },
+    {
+      id: "j-5",
+      title: "Principal Security Architect",
+      department: "Security",
+      location: "Delhi NCR / Gurugram",
+      applicants: 31,
+      shortlisted: 4,
+      status: "Active",
+      category: "Private",
+      postedBy: "Team",
+      age: "1w",
+      salary: "₹45–65 LPA",
+    },
+    {
+      id: "j-6",
+      title: "Lead Frontend Engineer (Next.js)",
+      department: "Engineering",
+      location: "Pune (Hinjawadi)",
+      applicants: 86,
+      shortlisted: 14,
+      status: "Closed",
+      category: "Hot Vacancy",
+      postedBy: "Me",
+      age: "3w",
+      salary: "₹28–38 LPA",
+    },
+    {
+      id: "j-7",
+      title: "VP of People & Talent Acquisition",
+      department: "HR & Talent",
+      location: "Bengaluru",
+      applicants: 0,
+      shortlisted: 0,
+      status: "Draft",
+      category: "NVite",
+      postedBy: "Me",
+      age: "Just now",
+      salary: "₹50–70 LPA",
+    },
+    {
+      id: "j-8",
+      title: "Senior DevOps Engineer",
+      department: "Infrastructure",
+      location: "Hyderabad",
+      applicants: 54,
+      shortlisted: 8,
+      status: "Expired",
+      category: "SMB Job",
+      postedBy: "Team",
+      age: "45d",
+      salary: "₹22–32 LPA",
+    },
+  ])
+
+  // Candidate Responses mock data
+  const [candidateResponses, setCandidateResponses] = useState([
+    {
+      id: "resp-1",
+      candidateName: "Priya Sharma",
+      jobTitle: "Senior Product Designer",
+      appliedDate: "Today 10:30 AM",
+      exp: "7 yrs",
+      ctc: "₹24L → ₹34L",
+      status: "Shortlisted",
+      viewStatus: "New",
+      match: 96,
+      notice: "30 days",
+      resume: "Priya_Sharma_Product_Design_Lead_2026.pdf",
+      location: "Bengaluru",
+    },
+    {
+      id: "resp-2",
+      candidateName: "Karan Singhania",
+      jobTitle: "Staff Backend Architect",
+      appliedDate: "Yesterday",
+      exp: "8 yrs",
+      ctc: "₹35L → ₹48L",
+      status: "Contacted",
+      viewStatus: "Action pending",
+      match: 93,
+      notice: "15 days",
+      resume: "Karan_Singhania_Distributed_Go.pdf",
+      location: "Bengaluru",
+    },
+    {
+      id: "resp-3",
+      candidateName: "Ananya Deshpande",
+      jobTitle: "Senior Product Designer",
+      appliedDate: "2 days ago",
+      exp: "5 yrs",
+      ctc: "₹20L → ₹28L",
+      status: "Maybe",
+      viewStatus: "Not viewed",
+      match: 88,
+      notice: "Immediate",
+      resume: "Ananya_Deshpande_AI_UX.pdf",
+      location: "Pune",
+    },
+    {
+      id: "resp-4",
+      candidateName: "Vikram Nambiar",
+      jobTitle: "Lead Frontend Engineer",
+      appliedDate: "3 days ago",
+      exp: "6 yrs",
+      ctc: "₹22L → ₹30L",
+      status: "Shortlisted",
+      viewStatus: "New",
+      match: 91,
+      notice: "Serving notice (10 days)",
+      resume: "Vikram_Nambiar_React_Next.pdf",
+      location: "Hyderabad",
+    },
+    {
+      id: "resp-5",
+      candidateName: "Rahul Bansal",
+      jobTitle: "Senior Product Designer",
+      appliedDate: "4 days ago",
+      exp: "2 yrs",
+      ctc: "₹8L → ₹14L",
+      status: "Rejected",
+      viewStatus: "Viewed",
+      match: 65,
+      notice: "60 days",
+      resume: "Rahul_Bansal_Junior.pdf",
+      location: "Delhi NCR",
+    },
+  ])
+
+  // Filtered jobs
+  const shownJobs = allJobsList.filter((job) => {
+    if (query && !job.title.toLowerCase().includes(query.toLowerCase()) && !job.department.toLowerCase().includes(query.toLowerCase())) {
+      return false
+    }
+    if (jobStatusTab === "active" && job.status !== "Active") return false
+    if (jobStatusTab === "drafts" && job.status !== "Draft") return false
+    if (jobStatusTab === "closed" && job.status !== "Closed") return false
+    if (jobStatusTab === "expired" && job.status !== "Expired") return false
+    if (categoryFilter !== "All Categories" && job.category !== categoryFilter) return false
+    if (postedByFilter === "Me" && job.postedBy !== "Me") return false
+    return true
+  })
+
+  // Filtered responses
+  const shownResponses = candidateResponses.filter((resp) => {
+    if (query && !resp.candidateName.toLowerCase().includes(query.toLowerCase()) && !resp.jobTitle.toLowerCase().includes(query.toLowerCase())) {
+      return false
+    }
+    if (responseTab === "shortlisted" && resp.status !== "Shortlisted") return false
+    if (responseTab === "maybe" && resp.status !== "Maybe") return false
+    if (responseTab === "rejected" && resp.status !== "Rejected") return false
+    if (responseFilter === "new" && resp.viewStatus !== "New") return false
+    if (responseFilter === "not_viewed" && resp.viewStatus !== "Not viewed") return false
+    if (responseFilter === "action_pending" && resp.viewStatus !== "Action pending") return false
+    return true
+  })
+
+  const updateCandidateStatus = (respId: string, newStatus: string) => {
+    setCandidateResponses(
+      candidateResponses.map((r) => (r.id === respId ? { ...r, status: newStatus } : r)),
+    )
+    setToast(`Updated candidate status to: ${newStatus}`)
+  }
+
+  const toggleSelectResponse = (id: string) => {
+    setSelectedResponseIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    )
+  }
+
+  const handleBulkStatus = (bulkStatus: string) => {
+    if (selectedResponseIds.length === 0) return
+    setCandidateResponses(
+      candidateResponses.map((r) =>
+        selectedResponseIds.includes(r.id) ? { ...r, status: bulkStatus } : r,
+      ),
+    )
+    setToast(`Updated ${selectedResponseIds.length} candidate responses to "${bulkStatus}"`)
+    setSelectedResponseIds([])
+  }
+
   return (
     <>
       <PageHeader
-        eyebrow="Recruitment"
-        title="Jobs"
-        description="Create, publish, and track every open role."
+        eyebrow="Recruitment Operating System"
+        title="Manage Jobs & Responses"
+        description="Oversee open job requisitions, track candidate responses, and manage outreach conversions."
         actions={
-          <Button onClick={() => navigate("/employer/jobs/new")}>
-            <Plus size={16} /> Create job
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="secondary"
+              className="text-xs"
+              onClick={() => navigate("/employer/jobs/new?type=hot")}
+            >
+              <Flame size={14} className="text-rose-500" /> Post Hot Vacancy
+            </Button>
+            <Button
+              className="text-xs bg-blue-600 hover:bg-blue-700 text-white"
+              onClick={() => navigate("/employer/jobs/new")}
+            >
+              <Plus size={15} /> Create Job
+            </Button>
+          </div>
         }
       />
-      <Card className="table-card">
-        <div className="table-toolbar">
-          <div className="search-box">
-            <Search />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search jobs…"
-            />
-          </div>
-          <div>
-            <Button variant="secondary">
-              <Filter size={16} /> Filters
-            </Button>
-            <Button variant="secondary">
-              All statuses <ChevronRight size={15} />
-            </Button>
-          </div>
+
+      {/* TOP VIEW MODE TOGGLE */}
+      <div className="flex items-center justify-between border-b border-gray-200 mb-4">
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setMainView("jobs")}
+            className={`px-4 py-2.5 text-sm font-bold border-b-2 transition flex items-center gap-2 cursor-pointer ${
+              mainView === "jobs"
+                ? "border-blue-600 text-blue-700"
+                : "border-transparent text-gray-500 hover:text-gray-900"
+            }`}
+          >
+            <BriefcaseBusiness size={16} /> Manage Jobs ({allJobsList.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setMainView("responses")}
+            className={`px-4 py-2.5 text-sm font-bold border-b-2 transition flex items-center gap-2 cursor-pointer ${
+              mainView === "responses"
+                ? "border-blue-600 text-blue-700"
+                : "border-transparent text-gray-500 hover:text-gray-900"
+            }`}
+          >
+            <Inbox size={16} /> Candidate Responses Management ({candidateResponses.length})
+            <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+          </button>
         </div>
-        <div className="tabs-row">
-          <Button variant="ghost" className="tab-active">
-            All jobs <Badge>28</Badge>
-          </Button>
-          <Button variant="ghost">
-            Active <Badge tone="green">24</Badge>
-          </Button>
-          <Button variant="ghost">
-            Drafts <Badge>3</Badge>
-          </Button>
-          <Button variant="ghost">
-            Closed <Badge>48</Badge>
-          </Button>
+
+        <div className="text-xs text-gray-500">
+          Auto-synced with Resdex & NVite Outreach
         </div>
-        <div className="data-table jobs-table">
-          <div className="table-row table-head-row">
-            <span>Role</span>
-            <span>Candidates</span>
-            <span>Pipeline</span>
-            <span>Status</span>
-            <span>Published</span>
-            <span />
+      </div>
+
+      {mainView === "jobs" ? (
+        /* 9. MANAGE JOBS VIEW */
+        <Card className="table-card">
+          {/* TOOLBAR WITH ADVANCED FILTERS */}
+          <div className="p-4 border-b border-gray-100 space-y-3">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="search-box flex-1 max-w-md">
+                <Search size={15} />
+                <Input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search job title, department, or location…"
+                  className="text-xs"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Category Dropdown */}
+                <label className="flex items-center gap-1.5 text-xs text-gray-600 font-medium">
+                  <span>Category:</span>
+                  <Select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="h-8 text-xs bg-white w-36"
+                  >
+                    <option>All Categories</option>
+                    <option>Hot Vacancy</option>
+                    <option>SMB Job</option>
+                    <option>Internship</option>
+                    <option>NVite</option>
+                    <option>Private</option>
+                  </Select>
+                </label>
+
+                {/* Job Posted By Dropdown */}
+                <label className="flex items-center gap-1.5 text-xs text-gray-600 font-medium">
+                  <span>Job Posted By:</span>
+                  <Select
+                    value={postedByFilter}
+                    onChange={(e) => setPostedByFilter(e.target.value)}
+                    className="h-8 text-xs bg-white w-32"
+                  >
+                    <option>All Recruiters</option>
+                    <option>Me</option>
+                    <option>Team</option>
+                  </Select>
+                </label>
+
+                {/* Sort By Dropdown */}
+                <label className="flex items-center gap-1.5 text-xs text-gray-600 font-medium">
+                  <span>Sort by:</span>
+                  <Select
+                    value={sortByDate}
+                    onChange={(e) => setSortByDate(e.target.value)}
+                    className="h-8 text-xs bg-white w-38"
+                  >
+                    <option>Posted/sent date</option>
+                    <option>Applicant count</option>
+                    <option>Job Title</option>
+                  </Select>
+                </label>
+
+                {/* Show Dropdown */}
+                <label className="flex items-center gap-1.5 text-xs text-gray-600 font-medium">
+                  <span>Show:</span>
+                  <Select
+                    value={showCount}
+                    onChange={(e) => setShowCount(e.target.value)}
+                    className="h-8 text-xs bg-white w-18"
+                  >
+                    <option>20</option>
+                    <option>40</option>
+                    <option>60</option>
+                  </Select>
+                </label>
+              </div>
+            </div>
+
+            {/* JOB STATUS TABS */}
+            <div className="flex items-center gap-1.5 pt-1 overflow-x-auto text-xs">
+              {[
+                { id: "all", label: "All Jobs", count: allJobsList.length },
+                { id: "active", label: "Active Jobs", count: allJobsList.filter((j) => j.status === "Active").length, tone: "green" },
+                { id: "drafts", label: "Drafts", count: allJobsList.filter((j) => j.status === "Draft").length },
+                { id: "closed", label: "Closed Jobs", count: allJobsList.filter((j) => j.status === "Closed").length },
+                { id: "expired", label: "Expired Jobs", count: allJobsList.filter((j) => j.status === "Expired").length },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setJobStatusTab(t.id as typeof jobStatusTab)}
+                  className={`px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition cursor-pointer ${
+                    jobStatusTab === t.id
+                      ? "bg-blue-50 text-blue-700 border border-blue-200"
+                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  <span>{t.label}</span>
+                  <Badge tone={t.tone as any}>{t.count}</Badge>
+                </button>
+              ))}
+            </div>
           </div>
-          {shown.map((job) => (
-            <div
-              className="table-row"
-              key={job.title}
-              onClick={() => setToast(`Opened ${job.title}`)}
-            >
-              <div className="job-title-cell">
-                <span className="job-icon">
-                  <BriefcaseBusiness />
+
+          {/* JOBS DATA TABLE */}
+          <div className="data-table jobs-table">
+            <div className="table-row table-head-row">
+              <span>Role & Category</span>
+              <span>Applicants</span>
+              <span>Shortlisted</span>
+              <span>Status</span>
+              <span>Posted By</span>
+              <span>Published</span>
+              <span>Actions</span>
+            </div>
+            {shownJobs.map((job) => (
+              <div
+                className="table-row hover:bg-blue-50/30 transition cursor-pointer"
+                key={job.id}
+                onClick={() => setToast(`Viewing responses for ${job.title}`)}
+              >
+                <div className="job-title-cell">
+                  <span className="job-icon">
+                    {job.category === "Hot Vacancy" ? (
+                      <Flame size={18} className="text-rose-500" />
+                    ) : job.category === "SMB Job" ? (
+                      <Zap size={18} className="text-amber-500" />
+                    ) : job.category === "Internship" ? (
+                      <GraduationCap size={18} className="text-purple-500" />
+                    ) : (
+                      <BriefcaseBusiness size={18} />
+                    )}
+                  </span>
+                  <span>
+                    <strong>{job.title}</strong>
+                    <small>
+                      {job.department} · {job.location} · {job.salary}
+                    </small>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <Badge
+                        tone={
+                          job.category === "Hot Vacancy"
+                            ? "red"
+                            : job.category === "SMB Job"
+                            ? "amber"
+                            : job.category === "Internship"
+                            ? "purple"
+                            : "blue"
+                        }
+                      >
+                        {job.category}
+                      </Badge>
+                    </div>
+                  </span>
+                </div>
+                <span>
+                  <strong className="text-blue-700">{job.applicants}</strong> responses
                 </span>
                 <span>
-                  <strong>{job.title}</strong>
-                  <small>
-                    {job.department} · {job.location}
-                  </small>
+                  <strong className="text-emerald-700">{job.shortlisted}</strong> vetted
                 </span>
+                <span>
+                  <Badge
+                    tone={
+                      job.status === "Active"
+                        ? "green"
+                        : job.status === "Draft"
+                        ? "purple"
+                        : "neutral"
+                    }
+                  >
+                    {job.status}
+                  </Badge>
+                </span>
+                <span className="text-xs text-gray-600 font-medium">{job.postedBy}</span>
+                <span>{job.age} ago</span>
+                <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                  <Button
+                    variant="secondary"
+                    className="text-xs h-7 px-2"
+                    onClick={() => {
+                      setMainView("responses")
+                      setToast(`Filtered responses for ${job.title}`)
+                    }}
+                  >
+                    View Responses
+                  </Button>
+                </div>
               </div>
-              <span>
-                <strong>{job.applicants}</strong> applicants
-              </span>
-              <span>{job.shortlisted} shortlisted</span>
-              <span>
-                <Badge tone={job.status === "Active" ? "green" : "neutral"}>
-                  {job.status}
-                </Badge>
-              </span>
-              <span>{job.age} ago</span>
-              <Button variant="ghost">
-                <MoreHorizontal />
-              </Button>
-            </div>
-          ))}
-        </div>
-        <div className="table-footer">
-          <span>Showing {shown.length} of 28 jobs</span>
-          <div>
-            <Button variant="secondary">
-              <ChevronLeft size={15} />
-            </Button>
-            <Button variant="secondary">1</Button>
-            <Button variant="secondary">2</Button>
-            <Button variant="secondary">
-              <ChevronRight size={15} />
-            </Button>
+            ))}
           </div>
-        </div>
-      </Card>
+
+          <div className="table-footer">
+            <span>Showing {shownJobs.length} of {allJobsList.length} jobs</span>
+            <div className="flex items-center gap-1 text-xs">
+              <Button variant="secondary" className="h-7"><ChevronLeft size={14} /></Button>
+              <Button variant="secondary" className="h-7">1</Button>
+              <Button variant="secondary" className="h-7"><ChevronRight size={14} /></Button>
+            </div>
+          </div>
+        </Card>
+      ) : (
+        /* 10. CANDIDATE RESPONSE MANAGEMENT VIEW */
+        <Card className="p-4 space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-gray-100 pb-3">
+            <div>
+              <h3 className="font-extrabold text-gray-900 text-base">Candidate Response Management Inbox</h3>
+              <p className="text-xs text-gray-500">Screen, shortlist, and dispatch NVite follow-ups to inbound applicants.</p>
+            </div>
+
+            {/* BULK ACTIONS BAR */}
+            {selectedResponseIds.length > 0 && (
+              <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 border border-blue-200 rounded-lg">
+                <span className="text-xs font-bold text-blue-900">
+                  {selectedResponseIds.length} selected
+                </span>
+                <Button
+                  className="text-xs h-7 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  onClick={() => handleBulkStatus("Shortlisted")}
+                >
+                  <Check size={13} /> Shortlist
+                </Button>
+                <Button
+                  className="text-xs h-7 bg-rose-600 hover:bg-rose-700 text-white"
+                  onClick={() => handleBulkStatus("Rejected")}
+                >
+                  <X size={13} /> Reject
+                </Button>
+                <Button
+                  variant="secondary"
+                  className="text-xs h-7"
+                  onClick={() => setToast(`Sent bulk NVite to ${selectedResponseIds.length} candidates`)}
+                >
+                  <Send size={13} /> Send NVite
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* RESPONSE TABS & FILTERS */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+            {/* Response Tabs */}
+            <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+              {[
+                { id: "all", label: "All responses", count: candidateResponses.length },
+                { id: "shortlisted", label: "Shortlisted", count: candidateResponses.filter((r) => r.status === "Shortlisted").length, tone: "green" },
+                { id: "maybe", label: "Maybe", count: candidateResponses.filter((r) => r.status === "Maybe").length, tone: "amber" },
+                { id: "rejected", label: "Rejected", count: candidateResponses.filter((r) => r.status === "Rejected").length, tone: "red" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setResponseTab(tab.id as typeof responseTab)}
+                  className={`px-3 py-1.5 rounded-lg font-bold flex items-center gap-1.5 transition cursor-pointer ${
+                    responseTab === tab.id
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  <span>{tab.label}</span>
+                  <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${responseTab === tab.id ? "bg-white/20 text-white" : "bg-white text-gray-700"}`}>
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {/* Response Sub-filters */}
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-gray-500 font-semibold">Response filter:</span>
+              <Select
+                value={responseFilter}
+                onChange={(e) => setResponseFilter(e.target.value as typeof responseFilter)}
+                className="h-8 text-xs bg-white w-36"
+              >
+                <option value="all">All</option>
+                <option value="new">New responses</option>
+                <option value="not_viewed">Not viewed</option>
+                <option value="action_pending">Action pending</option>
+              </Select>
+            </div>
+          </div>
+
+          {/* RESPONSES LIST */}
+          <div className="divide-y divide-gray-100 border border-gray-200 rounded-xl overflow-hidden bg-white">
+            {shownResponses.map((resp) => (
+              <div
+                key={resp.id}
+                className="p-4 hover:bg-gray-50/80 transition flex flex-col md:flex-row md:items-center justify-between gap-3"
+              >
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedResponseIds.includes(resp.id)}
+                    onChange={() => toggleSelectResponse(resp.id)}
+                    className="mt-1 rounded text-blue-600 accent-blue-600 cursor-pointer"
+                  />
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <strong className="text-sm text-gray-900 font-bold">{resp.candidateName}</strong>
+                      <Badge tone="purple">{resp.match}% Match</Badge>
+                      <Badge tone={resp.viewStatus === "New" ? "green" : "neutral"}>
+                        {resp.viewStatus}
+                      </Badge>
+                      <span className="text-xs text-gray-400">Applied {resp.appliedDate}</span>
+                    </div>
+                    <div className="text-xs text-gray-600 flex items-center gap-2 flex-wrap">
+                      <span className="font-semibold text-gray-800">{resp.jobTitle}</span>
+                      <span>·</span>
+                      <span>{resp.exp} exp</span>
+                      <span>·</span>
+                      <span>CTC: {resp.ctc}</span>
+                      <span>·</span>
+                      <span>Notice: {resp.notice}</span>
+                      <span>·</span>
+                      <span>{resp.location}</span>
+                    </div>
+                    <div className="text-[11px] text-gray-500 font-mono">
+                      📄 Attached: {resp.resume}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ROW ACTIONS: CONTACT & STATUS DROPDOWN */}
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                  {/* Status Dropdown */}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-gray-500 font-medium">Status:</span>
+                    <Select
+                      value={resp.status}
+                      onChange={(e) => updateCandidateStatus(resp.id, e.target.value)}
+                      className="h-8 text-xs bg-white font-medium w-40"
+                    >
+                      <option>Contacted</option>
+                      <option>Shortlisted</option>
+                      <option>Interview Scheduled</option>
+                      <option>Offer Released</option>
+                      <option>Rejected</option>
+                      <option>On Hold</option>
+                      <option>Joined</option>
+                    </Select>
+                  </div>
+
+                  {/* Contact Button */}
+                  <Button
+                    className="h-8 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
+                    onClick={() => setContactCandidateModal(resp)}
+                  >
+                    <MessageSquare size={13} /> Contact
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
+
+      {/* MODAL: CONTACT CANDIDATE */}
+      {contactCandidateModal && (
+        <Modal
+          open={Boolean(contactCandidateModal)}
+          onClose={() => setContactCandidateModal(null)}
+          title={`Contact Candidate · ${contactCandidateModal.candidateName}`}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setContactCandidateModal(null)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  const cName = contactCandidateModal.candidateName
+                  setContactCandidateModal(null)
+                  setToast(`Contact invitation dispatched to ${cName} via ${contactChannel.toUpperCase()}!`)
+                }}
+              >
+                <Send size={14} /> Send Message
+              </Button>
+            </>
+          }
+        >
+          <div className="space-y-4 text-xs text-gray-700">
+            <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center justify-between">
+              <div>
+                <strong className="text-sm font-bold text-emerald-900 block">{contactCandidateModal.candidateName}</strong>
+                <span className="text-gray-600">Applicant for {contactCandidateModal.jobTitle}</span>
+              </div>
+              <Badge tone="green">{contactCandidateModal.match}% Match</Badge>
+            </div>
+
+            <div>
+              <span className="font-bold text-gray-800 block mb-1">Choose Outreach Channel</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setContactChannel("whatsapp")}
+                  className={`px-3 py-2 rounded-lg border text-xs font-bold cursor-pointer flex-1 text-center ${
+                    contactChannel === "whatsapp"
+                      ? "bg-emerald-600 text-white border-emerald-600"
+                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  💬 WhatsApp Business API
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setContactChannel("email")}
+                  className={`px-3 py-2 rounded-lg border text-xs font-bold cursor-pointer flex-1 text-center ${
+                    contactChannel === "email"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  ✉️ Registered Email ID
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <span className="font-bold text-gray-800 block mb-1">Message Preview</span>
+              <textarea
+                defaultValue={`Hi ${contactCandidateModal.candidateName}, thanks for applying for the ${contactCandidateModal.jobTitle} position at Nexora Labs. We are impressed by your background (${contactCandidateModal.exp} exp) and would love to schedule a preliminary discussion.`}
+                className="w-full text-xs p-2.5 bg-gray-50 border border-gray-200 rounded-lg h-24 outline-none focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+        </Modal>
+      )}
+
       {toast && (
         <div className="toast">
           <CheckCircle2 /> {toast}
@@ -391,6 +1021,18 @@ export function CreateJobPage() {
   const [assistant, setAssistant] = useState(false)
   const [saved, setSaved] = useState(false)
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const jobTypeParam = searchParams.get("type")
+
+  const vacancyTitle =
+    jobTypeParam === "hot"
+      ? "Hot Vacancy (3x Visibility & Priority Requisition)"
+      : jobTypeParam === "smb"
+      ? "SMB Fast-Track Requisition (Cost-Optimized)"
+      : jobTypeParam === "internship"
+      ? "Campus / Internship Requisition"
+      : "Standard Job Requisition"
+
   return (
     <>
       <div className="back-row">
@@ -400,15 +1042,57 @@ export function CreateJobPage() {
         <span>Draft saved just now</span>
       </div>
       <PageHeader
-        eyebrow="New requisition"
-        title="Create a new job"
-        description="Define the role, requirements, and hiring workflow."
+        eyebrow="New Requisition Studio"
+        title={`Create Job · ${vacancyTitle}`}
+        description="Define the role, requirements, compensation, and autonomous screening workflow."
         actions={
           <Button variant="secondary" onClick={() => setSaved(true)}>
             Save draft
           </Button>
         }
       />
+
+      {/* VACANCY BANNER FOR HOT / SMB / INTERNSHIP */}
+      {jobTypeParam && (
+        <div
+          className={`p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs mb-4 ${
+            jobTypeParam === "hot"
+              ? "bg-rose-50 border-rose-200 text-rose-900"
+              : jobTypeParam === "smb"
+              ? "bg-amber-50 border-amber-200 text-amber-900"
+              : "bg-purple-50 border-purple-200 text-purple-900"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            {jobTypeParam === "hot" ? (
+              <Flame size={20} className="text-rose-500 shrink-0" />
+            ) : jobTypeParam === "smb" ? (
+              <Zap size={20} className="text-amber-500 shrink-0" />
+            ) : (
+              <GraduationCap size={20} className="text-purple-500 shrink-0" />
+            )}
+            <div>
+              <strong className="block font-bold">
+                {jobTypeParam === "hot"
+                  ? "Hot Vacancy Listing Configured"
+                  : jobTypeParam === "smb"
+                  ? "SMB Economy Listing Tier Activated"
+                  : "Campus / Internship Program Parameters Enabled"}
+              </strong>
+              <span className="text-[11px] opacity-90">
+                {jobTypeParam === "hot"
+                  ? "Priority indexing on Naukri & Talent Network search results with automated daily candidate alerts."
+                  : jobTypeParam === "smb"
+                  ? "Cost-effective distribution optimized for quick response times and high-growth teams."
+                  : "Includes monthly stipend ranges, academic major prerequisites, and graduation year filters."}
+              </span>
+            </div>
+          </div>
+          <Badge tone={jobTypeParam === "hot" ? "red" : jobTypeParam === "smb" ? "amber" : "purple"}>
+            {jobTypeParam.toUpperCase()}
+          </Badge>
+        </div>
+      )}
       <div className="stepper">
         {["Job details", "Requirements", "Screening", "Workflow", "Review"].map(
           (label, i) => (
@@ -1513,7 +2197,6 @@ export function PipelinePage() {
   )
 }
 
-
 const chats = [
   ["Priya Sharma", "Thanks, Neha. Tuesday at 11 works for me.", "2m", "PS"],
   ["Arjun Mehta", "I’ve completed the assessment.", "1h", "AM"],
@@ -1854,8 +2537,4 @@ export function InterviewsPage() {
       </Modal>
     </>
   )
-}
-
-export function GenericEmployerPage({ title }: { title: string }) {
-  return <FeatureDemoPage portal="Employer" title={title} />
 }

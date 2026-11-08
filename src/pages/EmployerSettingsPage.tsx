@@ -1,22 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
+import { Check, CheckCircle2, Plus } from "lucide-react"
 import {
-  Building2,
-  Check,
-  CheckCircle2,
-  Globe,
-  Key,
-  Layers,
-  Lock,
-  Mail,
-  Plus,
-  ShieldCheck,
-  Trash2,
-  Upload,
-  UserCheck,
-  Users,
-} from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Select } from "../components/ui"
+  Badge,
+  Button,
+  Card,
+  Input,
+  Modal,
+  Select,
+} from "../components/ui"
 
 export function EmployerSettingsPage() {
   const navigate = useNavigate()

@@ -1,11 +1,13 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router"
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
   Command,
   Eye,
   EyeOff,
+  Home,
   ShieldCheck,
   Sparkles,
 } from "lucide-react"
@@ -26,11 +28,20 @@ export function LoginPage({ type }: { type: "employer" | "candidate" }) {
   return (
     <div className="auth-page">
       <section className="auth-story">
-        <div className="auth-brand">
-          <span>
-            <Command size={20} />
+        <div
+          className="auth-brand cursor-pointer flex items-center justify-between"
+          onClick={() => navigate("/")}
+          title="Return to Public Home"
+        >
+          <div className="flex items-center gap-2">
+            <span>
+              <Command size={20} />
+            </span>
+            Talent Network
+          </div>
+          <span className="text-xs text-white/75 hover:text-white flex items-center gap-1 font-medium bg-white/10 px-2.5 py-1 rounded-full transition">
+            <Home size={13} /> Home
           </span>
-          Talent Network
         </div>
         <div className="story-copy">
           <span className="eyebrow light">
@@ -69,7 +80,20 @@ export function LoginPage({ type }: { type: "employer" | "candidate" }) {
       </section>
       <section className="auth-form-wrap">
         <div className="auth-form">
-          <div className="mobile-auth-brand">
+          <div className="flex items-center justify-between mb-4">
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              className="text-xs text-slate-500 hover:text-blue-600 flex items-center gap-1.5 font-medium transition cursor-pointer"
+            >
+              <ArrowLeft size={14} /> Back to Public Home
+            </button>
+          </div>
+          <div
+            className="mobile-auth-brand cursor-pointer"
+            onClick={() => navigate("/")}
+            title="Return to Public Home"
+          >
             <Command size={20} /> Talent Network
           </div>
           <div className="auth-quick-switcher">
@@ -173,11 +197,20 @@ export function SimpleAuthPage({
   return (
     <div className="center-auth">
       <div className="simple-auth">
-        <div className="auth-brand dark">
-          <span>
-            <Command size={20} />
+        <div
+          className="auth-brand dark cursor-pointer flex items-center justify-between"
+          onClick={() => navigate("/")}
+          title="Return to Public Home"
+        >
+          <div className="flex items-center gap-2">
+            <span>
+              <Command size={20} />
+            </span>
+            Talent Network
+          </div>
+          <span className="text-xs text-slate-500 hover:text-blue-600 flex items-center gap-1 font-medium transition">
+            <Home size={13} /> Home
           </span>
-          Talent Network
         </div>
         <span className="eyebrow">
           {kind === "register" ? "Create your workspace" : "Account recovery"}

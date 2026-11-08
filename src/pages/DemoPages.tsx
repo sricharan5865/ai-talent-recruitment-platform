@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
   ArrowRight,
-  Bot,
   Check,
   CheckCircle2,
   CircleAlert,

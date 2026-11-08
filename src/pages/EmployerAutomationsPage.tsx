@@ -1,24 +1,21 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  ArrowRight,
   Bot,
-  Calendar,
-  Check,
   CheckCircle2,
-  Clock,
-  Layers,
   Pause,
   Play,
   Plus,
-  RefreshCw,
-  Sliders,
-  Sparkles,
   Workflow,
-  X,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  Modal,
+  Select,
+} from "../components/ui"
 
 export interface AutomationRule {
   id: string

@@ -18,9 +18,11 @@ import {
   Command,
   Compass,
   CornerDownLeft,
+  Home,
   Layers,
   LayoutTemplate,
   LogIn,
+  LogOut,
   Menu,
   Moon,
   PanelLeftClose,
@@ -32,7 +34,12 @@ import {
   WandSparkles,
   X,
 } from "lucide-react"
-import { Avatar, Badge, Button, Input } from "../ui"
+import {
+  Avatar,
+  Badge,
+  Button,
+  Input,
+} from "../ui"
 import { adminNav, candidateNav, employerNav } from "./nav"
 import { candidates, jobs } from "../../data/mockData"
 
@@ -414,6 +421,22 @@ export function AppShell({
         badge: "Auth UI",
         to: "/candidate/login",
       },
+      {
+        id: "act-home-public",
+        title: "Public Home Page",
+        subtitle: "Explore jobs, market compensation & public directory",
+        category: "Navigation",
+        badge: "Public",
+        to: "/",
+      },
+      {
+        id: "act-signout",
+        title: "Sign Out",
+        subtitle: "End current session and return to Public Home",
+        category: "Account",
+        badge: "Action",
+        to: "/",
+      },
     ]
     if (!q) return allScreens.slice(0, 12)
     return allScreens
@@ -599,6 +622,27 @@ export function AppShell({
               >
                 <LogIn size={14} /> Sign-in Screen
               </Button>
+              <div className="switch-menu-divider" />
+              <Button
+                variant="ghost"
+                className="text-blue-600 hover:text-blue-700"
+                onClick={() => {
+                  setSwitchOpen(false)
+                  navigate("/")
+                }}
+              >
+                <Home size={14} /> Public Home Page
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                onClick={() => {
+                  setSwitchOpen(false)
+                  navigate("/")
+                }}
+              >
+                <LogOut size={14} /> Sign Out
+              </Button>
             </div>
           )}
         </div>
@@ -647,33 +691,44 @@ export function AppShell({
               <i />
             </div>
           </div>
-          <div className="user-card">
-            <Avatar
-              name={
-                isAdmin
-                  ? "Aditi Rao"
-                  : portal === "Employer"
-                    ? "Neha Kapoor"
-                    : "Priya Sharma"
-              }
-              size="sm"
-            />
-            <span>
-              <strong>
-                {isAdmin
-                  ? "Aditi Rao"
-                  : portal === "Employer"
-                    ? "Neha Kapoor"
-                    : "Priya Sharma"}
-              </strong>
-              <small>
-                {isAdmin
-                  ? "Platform administrator"
-                  : portal === "Employer"
-                    ? "Talent acquisition lead"
-                    : "Product designer"}
-              </small>
-            </span>
+          <div className="user-card flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <Avatar
+                name={
+                  isAdmin
+                    ? "Aditi Rao"
+                    : portal === "Employer"
+                      ? "Neha Kapoor"
+                      : "Priya Sharma"
+                }
+                size="sm"
+              />
+              <span className="truncate">
+                <strong className="truncate block">
+                  {isAdmin
+                    ? "Aditi Rao"
+                    : portal === "Employer"
+                      ? "Neha Kapoor"
+                      : "Priya Sharma"}
+                </strong>
+                <small className="truncate block">
+                  {isAdmin
+                    ? "Platform administrator"
+                    : portal === "Employer"
+                      ? "Talent acquisition lead"
+                      : "Product designer"}
+                </small>
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate("/")}
+              title="Sign Out to Public Home"
+              aria-label="Sign Out"
+              className="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-white/10 rounded-md transition shrink-0 ml-1"
+            >
+              <LogOut size={15} />
+            </button>
           </div>
         </div>
       </aside>
@@ -926,6 +981,17 @@ export function AppShell({
                   <div className="layout-section-label">More</div>
                   <button
                     type="button"
+                    className="layout-row text-blue-600 hover:text-blue-700 font-medium"
+                    onClick={() => {
+                      setLayoutOpen(false)
+                      navigate("/")
+                    }}
+                  >
+                    <Home size={16} />
+                    <span>Public Home Page</span>
+                  </button>
+                  <button
+                    type="button"
                     className="layout-row"
                     onClick={() => setDark(!dark)}
                   >
@@ -939,6 +1005,18 @@ export function AppShell({
                   >
                     <Layers size={16} />
                     <span>UX design lens</span>
+                  </button>
+                  <div className="switch-menu-divider" style={{ margin: "6px 0" }} />
+                  <button
+                    type="button"
+                    className="layout-row text-rose-600 hover:text-rose-700 hover:bg-rose-50 font-medium"
+                    onClick={() => {
+                      setLayoutOpen(false)
+                      navigate("/")
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>Sign Out</span>
                   </button>
                 </div>
               )}
@@ -1032,6 +1110,26 @@ export function AppShell({
                   : "Agent catalog"}
             </Button>
             )}
+
+            <Button
+              variant="ghost"
+              className="home-nav-btn text-xs font-semibold text-slate-700 hover:text-blue-600 hover:bg-slate-100 h-9 px-2.5 flex items-center gap-1.5 transition"
+              onClick={() => navigate("/")}
+              title="Go to Public Home Page"
+            >
+              <Home size={15} />
+              <span className="hidden xl:inline">Home</span>
+            </Button>
+
+            <Button
+              variant="ghost"
+              className="sign-out-btn text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 h-9 px-2.5 flex items-center gap-1.5 transition border border-rose-200/60"
+              onClick={() => navigate("/")}
+              title="Sign Out to Public Home"
+            >
+              <LogOut size={15} />
+              <span className="inline">Sign Out</span>
+            </Button>
           </div>
         </header>
 

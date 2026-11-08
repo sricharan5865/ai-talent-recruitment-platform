@@ -1,26 +1,21 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  ArrowRight,
   Bot,
-  BrainCircuit,
   Check,
   CheckCircle2,
   Copy,
-  FileCheck2,
-  HelpCircle,
-  IndianRupee,
-  Lightbulb,
-  MessageSquare,
-  Play,
   RotateCcw,
   Send,
   Sparkles,
   Target,
-  UserCheck,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+} from "../components/ui"
 
 interface ChatMessage {
   id: string

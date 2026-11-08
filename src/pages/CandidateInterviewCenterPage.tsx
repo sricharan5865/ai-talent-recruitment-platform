@@ -2,26 +2,20 @@ import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
   ArrowRight,
-  Building2,
   Calendar,
-  CalendarDays,
-  Check,
   CheckCircle2,
   Clock,
-  ExternalLink,
-  FileCheck2,
-  HelpCircle,
-  MapPin,
-  Play,
-  Plus,
-  RotateCcw,
   Sparkles,
-  UserCheck,
-  Users,
   Video,
-  X,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  Modal,
+  Select,
+} from "../components/ui"
 
 export interface InterviewScheduleItem {
   id: string
@@ -35,6 +29,7 @@ export interface InterviewScheduleItem {
   panelMembers: string[]
   status: "Scheduled" | "Completed" | "Pending Reschedule"
   scorecardNotes?: string
+  scorecardAvg?: string
   guidePoints: string[]
 }
 

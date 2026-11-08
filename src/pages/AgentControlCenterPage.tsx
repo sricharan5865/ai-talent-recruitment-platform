@@ -1,25 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  AlertCircle,
-  ArrowRight,
   Bot,
-  BrainCircuit,
-  Building2,
   Calendar,
   Check,
   CheckCircle2,
   ChevronRight,
-  Clock,
-  Code2,
   Cpu,
   FileCheck2,
-  FileText,
   Filter,
-  Flame,
-  HelpCircle,
-  IndianRupee,
-  Layers,
   Lock,
   MessageSquare,
   Pause,
@@ -27,21 +16,22 @@ import {
   RefreshCw,
   Search,
   Send,
-  Shield,
   ShieldAlert,
   ShieldCheck,
-  Sliders,
   Sparkles,
   Target,
   Terminal,
   TrendingUp,
-  UserCheck,
   Users,
   Workflow,
   X,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Progress, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Modal,
+} from "../components/ui"
 
 export interface AgentDefinition {
   id: string

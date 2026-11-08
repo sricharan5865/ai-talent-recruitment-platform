@@ -2,7 +2,6 @@ import { Fragment, useState, type CSSProperties } from "react"
 import { useNavigate } from "react-router"
 import {
   ArrowRight,
-  Award,
   BadgeCheck,
   BellPlus,
   Bookmark,
@@ -16,31 +15,22 @@ import {
   CircleAlert,
   Clock3,
   Copy,
-  ExternalLink,
-  Eye,
   FileCheck2,
   FileText,
   Filter,
   GitCompareArrows,
-  HelpCircle,
   IndianRupee,
-  Layers,
   Lightbulb,
-  ListTodo,
   MapPin,
   Play,
   Plus,
   Search,
   Send,
-  ShieldCheck,
-  SlidersHorizontal,
   Sparkles,
   Star,
   Target,
-  TrendingUp,
   UserRound,
   UsersRound,
-  Zap,
 } from "lucide-react"
 import {
   Badge,
@@ -52,7 +42,6 @@ import {
   Select,
 } from "../components/ui"
 import { jobs } from "../data/mockData"
-import { FeatureDemoPage } from "./DemoPages"
 
 function Header({
   eyebrow,
@@ -2058,8 +2047,4 @@ export function CandidateProfileSelfPage() {
       </Modal>
     </>
   )
-}
-
-export function GenericCandidatePage({ title }: { title: string }) {
-  return <FeatureDemoPage portal="Candidate" title={title} />
 }

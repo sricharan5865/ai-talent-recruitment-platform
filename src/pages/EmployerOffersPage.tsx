@@ -1,29 +1,21 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import {
-  ArrowRight,
-  Award,
-  BadgeCheck,
-  Check,
   CheckCircle2,
-  Clock,
   Download,
-  Eye,
   FileCheck2,
-  FileText,
-  IndianRupee,
-  Layers,
   Plus,
   Send,
-  ShieldCheck,
-  Sparkles,
-  TrendingUp,
-  UserCheck,
-  Users,
-  X,
-  Zap,
 } from "lucide-react"
-import { Badge, Button, Card, Input, Modal, Progress, Select } from "../components/ui"
+import {
+  Badge,
+  Button,
+  Card,
+  Input,
+  Modal,
+  Progress,
+  Select,
+} from "../components/ui"
 
 export interface OfferCandidate {
   id: string
